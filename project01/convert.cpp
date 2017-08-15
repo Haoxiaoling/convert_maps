@@ -3,11 +3,14 @@
 #include<pcl/point_types.h>
 #include<pcl/filters/passthrough.h>
 #include<pcl/io/pcd_io.h>
+#include <pcl/filters/voxel_grid.h>
 #include<pcl/filters/project_inliers.h>
 #include<pcl/ModelCoefficients.h>
  #include <pcl/visualization/cloud_viewer.h>
  #include <pcl/filters/radius_outlier_removal.h>
  #include <pcl/filters/statistical_outlier_removal.h>
+
+void downsample(pcl::PointCloud<pcl::PointXYZ>::Ptr &input,pcl::PointCloud<pcl::PointXYZ>::Ptr &output);
 
 int main(int argc,char** argv)
 {
@@ -18,8 +21,10 @@ int main(int argc,char** argv)
   }
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr dcloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ> cloud_projected;
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_left (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr dcloud_left (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::io::loadPCDFile (argv[1], *cloud);
   std::cout<<cloud->width*cloud->height<<std::endl;
   pcl::PassThrough<pcl::PointXYZ> pass;
@@ -27,8 +32,13 @@ int main(int argc,char** argv)
   pass.setFilterFieldName("z");
   pass.setFilterLimits(atof(argv[2]),atof(argv[3]));
   pass.filter(*cloud_filtered);
+
+  downsample(cloud_filtered,dcloud_filtered);
+
   pass.setFilterLimitsNegative(true);
   pass.filter(*cloud_left);
+
+  downsample(cloud_left,dcloud_left);
 
   pcl::PointXYZ minPt, maxPt;
 
@@ -122,12 +132,12 @@ int main(int argc,char** argv)
   pcl::visualization::PCLVisualizer viewer ("Matrix transformation example");
   //viewer.setFullScreen(true);
    // Define R,G,B colors for the point cloud
-  pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> left_cloud_color_handler (cloud_left, 255, 255, 255);
+  pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> left_cloud_color_handler (dcloud_left, 255, 255, 255);
   // We add the point cloud to the viewer and pass the color handler
-  viewer.addPointCloud (cloud_left, left_cloud_color_handler, "original_cloud");
+  viewer.addPointCloud (dcloud_left, left_cloud_color_handler, "original_cloud");
 
-  pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> filtered_cloud_color_handler (cloud_filtered, 230, 20, 20); // Red
-  viewer.addPointCloud (cloud_filtered, filtered_cloud_color_handler, "transformed_cloud");
+  pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> filtered_cloud_color_handler (dcloud_filtered, 230, 20, 20); // Red
+  viewer.addPointCloud (dcloud_filtered, filtered_cloud_color_handler, "transformed_cloud");
 
   viewer.addCoordinateSystem (1.0, "cloud",0);
   viewer.setBackgroundColor(0.05, 0.05, 0.05, 0); // Setting background to a dark grey
@@ -141,4 +151,13 @@ int main(int argc,char** argv)
      viewer.spinOnce ();
    }
   return(0);
+}
+
+void downsample(pcl::PointCloud<pcl::PointXYZ>::Ptr &input,pcl::PointCloud<pcl::PointXYZ>::Ptr &output)
+{
+  //pcl::PointCloud<pcl::PointXYZ>::Ptr output (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::VoxelGrid<pcl::PointXYZ> fil;
+  fil.setInputCloud (input);
+  fil.setLeafSize (0.1f, 0.1f, 0.1f);
+  fil.filter (*output);
 }
