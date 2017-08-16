@@ -1,3 +1,9 @@
+/*
+      writed by Xiaoling
+      time:2017.8.16
+      for: load .xyz point cloud files and generate a complete point cloud file.
+
+*/
 #include"sttl.h"
 #include<list>
 #include <iostream>
@@ -21,7 +27,7 @@ int main(int argc,char** argv)
   if(argc != 5)
   {
     std::cerr<<"Usage: "<<std::endl;
-    std::cerr<<"./loadtrans ".stt file path" "the .xyz file path" "the path the .pcd file you want to save from .xyz file" "the path you want to save the complete point cloud" "<<std::endl;
+    std::cerr<<"./loadtrans \".stt file path\" \"the .xyz file path\" \"the path the .pcd file you want to save from .xyz file\" \"the path you want to save the complete point cloud\" "<<std::endl;
     exit(0);
   }
 

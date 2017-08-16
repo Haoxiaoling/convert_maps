@@ -1,3 +1,9 @@
+/*
+      writed by Xiaoling
+      time:2017.8.16
+      for: convert 3D point cloud map to 2D point cloud map.
+
+*/
 #include<iostream>
 #include <stdlib.h>
 #include<pcl/point_types.h>
@@ -17,7 +23,7 @@ int main(int argc,char** argv)
   if(argc != 5)
   {
     std::cerr<<"Usage: "<<std::endl;
-    std::cerr<<"./convert "the 3D maps path" "the low threshold of map slice" "the low threshold of map slice" "the path you want to save the 2D map""<<std::endl;
+    std::cerr<<"./convert \"the 3D maps path\" \"the low threshold of map slice\" \"the low threshold of map slice\" \"the path you want to save the 2D map\""<<std::endl;
     exit(0);
   }
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
