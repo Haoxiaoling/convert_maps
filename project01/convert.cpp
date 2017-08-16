@@ -16,8 +16,9 @@ int main(int argc,char** argv)
 {
   if(argc != 5)
   {
-    std::cerr<<"please specify command line arg '-p', '-f'"<<std::endl;
-    //exit(0);
+    std::cerr<<"Usage: "<<std::endl;
+    std::cerr<<"./convert "the 3D maps path" "the low threshold of map slice" "the low threshold of map slice" "the path you want to save the 2D map""<<std::endl;
+    exit(0);
   }
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);

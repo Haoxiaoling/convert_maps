@@ -18,8 +18,12 @@ int CountLines(char *filename);
 void readxyz2pcd(const std::string &file,const std::string &name,const std::string &floorpath);
 int main(int argc,char** argv)
 {
-  if(argc != 2)
-    std::cerr<<"please input the file path"<<std::endl;
+  if(argc != 5)
+  {
+    std::cerr<<"Usage: "<<std::endl;
+    std::cerr<<"./loadtrans ".stt file path" "the .xyz file path" "the path the .pcd file you want to save from .xyz file" "the path you want to save the complete point cloud" "<<std::endl;
+    exit(0);
+  }
 
   std::list<sttl::Transform> transforms,transform1;
   sttl::loadList(transforms,argv[1]);
