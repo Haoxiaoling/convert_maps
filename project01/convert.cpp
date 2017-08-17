@@ -26,6 +26,7 @@ int main(int argc,char** argv)
     std::cerr<<"./convert \"the 3D maps path\" \"the low threshold of map slice\" \"the low threshold of map slice\" \"the path you want to save the 2D map\""<<std::endl;
     exit(0);
   }
+  pcl::PCDWriter writer;
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr dcloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
@@ -40,11 +41,13 @@ int main(int argc,char** argv)
   pass.setFilterLimits(atof(argv[2]),atof(argv[3]));
   pass.filter(*cloud_filtered);
 
+  writer.write<pcl::PointXYZ> ("slice.pcd",*cloud_filtered,false);
   downsample(cloud_filtered,dcloud_filtered);
 
   pass.setFilterLimitsNegative(true);
   pass.filter(*cloud_left);
 
+  writer.write<pcl::PointXYZ> ("left.pcd",*cloud_left,false);
   downsample(cloud_left,dcloud_left);
 
   pcl::PointXYZ minPt, maxPt;

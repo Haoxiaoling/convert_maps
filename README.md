@@ -16,6 +16,8 @@ _______________________________
 >
 > PS: The have four argvs to input(will show if you didn't input the correct amount of the argvs) . The first argv is the path of the .stt file to load. And the second argv is the .xyz files path.
 The third argv is .pcd files path ,and these files are convert from the .xyz files. And maybe it will be useful in the future. And the last argv is a file name which will save the complete point cloud.
+
+> Add 8.17 PCDWriter can save point cloud into a .pcd file. And it's very easy to use.
 _______________________________
 ### 2. Convert the 3D map to 2D map
 >
@@ -26,7 +28,15 @@ _______________________________
 > (3).Then do project the point cloud into the xy plane. And save the point cloud into .pcd file.
 >
 > PS: This also has four argvs. The first is the 3D map path. And the second and the third is the threshold of the slice of the map.And if you don't know the argv should be, you can input whatever after execution you can get the scale of the point cloud and the next time, you can input the correct threshold. And the last argv is the path you want to save the 2D map point cloud(It will be a .pcd file).
+>
+> *the pair of threshold -1.0 0.4  will be nice after my many experiment*
 _______________________________
 ### 3.Generate the transfome tree.
 >
-> Coming soon.
+> Here I am. This is more easy.
+>
+> (1).First thing we should know is there are to many files. And maybe we should do all of these. So the first step is clear. It is traversalling the folder in which the transform matrixes saved. If it is still dir we should do something. Until we get all files and without folder.
+>
+> Then, the transform matrixes are saved in .stt files. So check these files if they are .stt files. If it is, get its frameName as child, and referenceFrameName as parents. And write it to .dot file.
+>
+> After that, we get the transform matrixes tree in .dot file. And in command line and input "dot -O -Tpdf ".dot file namme"" to visualization the tree.And finish it.
